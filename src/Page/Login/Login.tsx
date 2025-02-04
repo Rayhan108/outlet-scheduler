@@ -3,17 +3,47 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Link } from "react-router-dom";
+import { Link,} from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { useAppDispatch } from "@/redux/hooks";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { verifyToken } from "@/utils/verrifyToken";
+import { setUser, TUser } from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
+import Loader from "@/components/Loader/Loader";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm();
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log("Login Data", data);
-  };
+  const [loading,setLoading]=useState(false)
 
+  const dispatch = useAppDispatch();
+  const [login] = useLoginMutation();
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+
+ try{
+    const userInfo = {
+        email: data.email,
+        password: data.password,
+        isSocial: false,
+        fcmToken: null
+      };
+   console.log("user info",userInfo);
+      const res = await login(userInfo).unwrap();
+      setLoading(true)
+      const user = verifyToken(res.data.accessToken) as TUser;
+      console.log("dispatchUser", user);
+      dispatch(setUser({ user: user, token: res.data.accessToken }));
+      setLoading(false)
+      toast.success(res?.message);
+  
+      if (loading) return <Loader />;
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
+ }catch(err:any){
+    toast.error(err?.data?.message)
+ }
+  };
   return (
     <div className="flex min-h-screen bg-[#F7FAFC]">
       {/* Left Section */}
@@ -95,7 +125,7 @@ const Login = () => {
       </div>
 
       {/* Right Section */}
-      <div className="w-1/2 flex items-center h-screen  bg-[#C0D3F2] justify-center p-10 shadow-lg">
+      <div className="w-1/2 flex items-center   bg-[#C0D3F2] justify-center p-10 shadow-lg">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-[#1C4587]">Welcome Back!</h2>
           <p className="text-lg text-[#1C4587] py-9">
