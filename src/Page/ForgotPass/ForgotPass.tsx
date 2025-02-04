@@ -1,4 +1,4 @@
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 const ForgotPass = () => {
   const form = useForm();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {};
   return (
     <div className="flex min-h-screen bg-[#F7FAFC]">
       {/* Left Section */}
@@ -17,7 +15,7 @@ const ForgotPass = () => {
             Forgot Password
           </h2>
 
-          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+          <form className="space-y-4" >
             {/* Email Field */}
             <div>
               <label className="block text-sm font-medium text-[#2D3748]">
