@@ -29,11 +29,11 @@ const Login = () => {
         isSocial: false,
         fcmToken: null
       };
-   console.log("user info",userInfo);
+//    console.log("user info",userInfo);
       const res = await login(userInfo).unwrap();
       setLoading(true)
       const user = verifyToken(res.data.accessToken) as TUser;
-      console.log("dispatchUser", user);
+    //   console.log("dispatchUser", user);
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       setLoading(false)
       toast.success(res?.message);
@@ -64,7 +64,7 @@ const Login = () => {
               <Input
                 {...form.register("email", { required: "Email is required" })}
                 type="email"
-                placeholder="yourname@gmail.com"
+                placeholder="Asadujjaman@gmail.com"
                 className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm"
               />
               {form.formState.errors.email && (
@@ -111,9 +111,9 @@ const Login = () => {
                   Remember Password
                 </label>
               </div>
-              <p className="text-[#FF0000] cursor-pointer hover:underline">
+         <Link to="/forgotPass">     <p className="text-[#FF0000] cursor-pointer hover:underline">
                 Forgot Password?
-              </p>
+              </p></Link>
             </div>
 
             {/* Submit Button */}
